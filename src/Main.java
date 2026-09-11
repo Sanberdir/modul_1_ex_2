@@ -13,34 +13,34 @@ public class Main {
         System.out.println("=== НАЧАЛО ВЫПОЛНЕНИЯ ПРОГРАММЫ ===");
 
         List<Student> students = loadStudentsFromFile("./students.txt");
+
         System.out.println("[Задание 3] Коллекция List<Student> успешно заполнена из файла.\n");
 
+        System.out.println("=== КНИГИ КАЖДОГО СТУДЕНТА ===");
+
+        for (Student student : students) {
+            student.printBooks();
+            System.out.println();
+        }
+
         System.out.println("=== ЗАПУСК ЕДИНОГО СТРИМА (ЗАДАНИЕ 4) ===");
-        System.out.println(
-                students.stream()
-                        .peek(student -> System.out.println("[Задание 4.1] Вывод студента: " + student))
 
-                        .map(Student::getBooks)
-
-                        .flatMap(List::stream)
-
-                        .sorted((b1, b2) -> Integer.compare(b1.getPages(), b2.getPages()))
-
-                        .distinct()
-
-                        .filter(book -> book.getYear() > 2000)
-                        .peek(book -> System.out.println("   -> [Задание 4.4-4.6] Книга прошла сортировку, уникализацию и фильтр: " + book))
-
-                        .limit(3)
-
-                        .map(Book::getYear)
-                        .peek(year -> System.out.println("      -> [Задание 4.7-4.8] Год попал в лимит из 3-х элементов: " + year))
-
-                        .findFirst()
-
-                        .map(year -> "\n[Задание 4.10] Год выпуска найденной книги: " + year)
-                        .orElse("\n[Задание 4.10] Подходящая книга отсутствует в базе данных.")
-        );
+        students.stream()
+                .peek(student -> System.out.println("[Задание 4.1] Вывод студента: " + student))
+                .map(Student::getBooks)
+                .flatMap(List::stream)
+                .sorted((b1, b2) -> Integer.compare(b1.getPages(), b2.getPages()))
+                .distinct()
+                .filter(book -> book.getYear() > 2000)
+                .peek(book -> System.out.println("   -> [Задание 4.4-4.6] Книга прошла сортировку, уникализацию и фильтр: " + book))
+                .limit(3)
+                .map(Book::getYear)
+                .peek(year -> System.out.println("      -> [Задание 4.7-4.8] Год попал в лимит из 3-х элементов: " + year))
+                .findFirst()
+                .ifPresentOrElse(
+                        year -> System.out.println("\n[Задание 4.10] Год выпуска найденной книги: " + year),
+                        () -> System.out.println("\n[Задание 4.10] Подходящая книга отсутствует в базе данных.")
+                );
 
         System.out.println("\n=== ВСЕ ЗАДАНИЯ УСПЕШНО ВЫПОЛНЕНЫ ===");
     }
